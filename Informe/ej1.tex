@@ -1,0 +1,160 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Instalacion del Sistema Operativo}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\subsection{A - Indique graficamente el layout del sistema operativo MINIX indicando sus componentes y las funciones que brindan. En especial los system\_calls que contienen.}
+
+\vskip1cm
+
+MINIX esta estructurado en 4 capas bien definidas.\footnote{Sistemas Operativos \textit{Diseño e implementacion} Andrew S. Tanenbaum. CAP 2 SEC 2.5 pag 94}\\
+Cada capa realiza una funcion bien definida y se comunica por medio de mensajes. Gracias a su modularidad el sistema operativo MINIX es facilmente modificable, pues no es necesario conocer la implementacion de las demas secciones.
+
+\imagen{Layout.png}{}{El Layout de MINIX.}
+
+\begin{itemize}
+\item Capa 1\\
+Es encarga del manejo de hardware, atrapando todas las interrupciones y señales que se lanzan, realiza la planificacion, cambios de contexto (salvando y restaurando registros) y ofece a las capas superiores una interface para el envio de mensajes, y las tares de bajo nivel correspondientes para que funcione bien la abstraccion de procesos.
+\item Capa 2\\
+Contiene las taras de Entrada/Salida para cada tipo de dispositivo. Se requiere una tarea particular para cada tipo de dispositivo, incuidos discos, impresoras, interfaces de red, relojes y cualquier otro dispositivo que desee comunicarse con el sistema. Es decir, contiene todo el conjunto de drivers necesarios para manipular todos los dispositivos del sistema. Junto a la capa 1, forman un solo programa binario llamado KERNEL, aunque su planificacion se hace de forma separada y se comunican utilizando mensajes.
+\item Capa 3\\
+Contiene todos los procesos que tienen el fin de brindar servicios utiles a los procesos de usuario. Como lo son la administracion de memoria y el sistema de archivos. Ejecutan a un nivel menos privilegiado que el kernel y ejecutan las llamadas al sistema operativo MINIX relativas a la administracion de memoria (MM) y sistema de archivos (FS). Este nivel se encarga en su mayoria en interceptar las llamadas al sistema operativo, mientras que el KERNEL, de la administracion de recursos.
+\item Capa 4\\
+En la capa superior se encuentran los procesos de usuarios: shells, editores compiladores y programas escritos por el usuario.
+\end{itemize}
+
+\newpage
+
+\textbf{System Calls}\footnote{Sistemas Operativos \textit{Diseño e implementacion} Andrew S. Tanenbaum. CAP 1 SEC 1.4 pag 23} de MINIX
+
+\begin{itemize}
+
+\item Llamadas al sistema para la Administración de Procesos:
+
+\begin{flushleft}
+\begin{tabular}{ll}
+pid = fork ()						& Crea un proceso hijo idéntico al padre \\
+pid = waitpid(pid, \&statloc, opts)	& Espera a que un hijo termine y toma su condición de\\
+									& salida\\
+s = wait (\&status)					& Versión vieja de waitpid\\
+s = execve (name, argv, envp)		& Sustituye la imagen en memoria de un proceso\\
+exit (status)						& Finaliza la ejecución del proceso y devuelve su estado\\
+size = brk (addr)					& Fija el tamaño del segmento de datos\\
+pid = getpid ()						& Devuelve el id del proceso que lo invoca\\
+pid = getpgrp ()					& Devuelve el id de grupo de procesos del invocador\\
+pid = setsid ()						& Crea una nueva sesión y devuelve su id de grupo de\\
+									& procesos\\
+s = ptrace (req, pid, addr, data)	& Se usa para depurar\\
+\end{tabular}
+\end{flushleft}
+
+
+\item Llamadas al sistema para Señalización:
+
+\begin{flushleft}
+\begin{tabular}{ll}
+s = sigaction (sig, \&act, \&oldact) & Define la acción a emprender al recibir señales.\\
+s = sifreturn(\&context)			& Regresa una señal.\\
+s = sigprocmask(how,\&set,\&old)	& Examina o cambia la máscara de señal.\\
+s = sigpending(set)					& Obtiene el conjunto de señales bloqueadas.\\
+s = sigsuspend(sigmask)				& Sustituye la máscara de señal y suspende el proceso.\\
+s = kill(pid,sig)					& Envía una señal a un proceso.\\
+residual = alarm(seconds)			& Pone la alarma del reloj.\\
+s = pause()							& Suspende el invocador hasta la próxima señal.\\
+\end{tabular}
+\end{flushleft}
+
+
+\item Llamadas al sistema para la Administración de Archivos:
+
+\begin{flushleft}
+\begin{tabular}{ll}
+fd = creat(name,mode)		& Forma obsoleta de crear un archivo nuevo.\\
+fd = mknod(name,mode,addr)	& Crea un inodo normal, especial o de directorio.\\
+fd = open(file,how,...)		& Abre un archivo para leer, escribir o ambas cosas.\\
+s = close(fd) 				& Cierra un archivo abierto.\\
+n = read(fd,buffer,nbytes)	& Lee datos de un archivo colocándolos en un buffer.\\
+n = write(fd,buffer,nbytes)	& Escribe datos de un buffer a un archivo.\\
+pos = lseek(fd,offset,whence)	& Mueve el apuntador de archivos.\\
+s = stat(name,\&buf)		& Obtiene la información de estado de un archivo.\\
+s = fstat(fd,\&buf)			& Obtiene la información de estado de un archivo.\\
+fd = dup(fd)				& Asigna un nuevo descriptor de archivo a un archivo abierto.\\
+s = pipe(\&fd[0])			& Crea un conducto.\\
+s = ioctl(fd, request, argp) & Realiza operaciones especiales con un archivo.\\
+s = access(name,amode)		& Verifica la accesibilidad de un archivo.\\
+s = rename(old,new)			& Da a un archivo un nuevo nombre.\\
+s = fcntl(fd,cmd,...)		& Bloqueo de archivos y otras operaciones.\\
+\end{tabular}
+\end{flushleft}
+
+
+\item Llamadas al sistema para la Administración de Directorios y Sistema de Archivos:
+
+\begin{flushleft}
+\begin{tabular}{ll}
+s = mkdir(name,mode)				& Crea un nuevo directorio.\\
+s = rmdir(name)					& Elimina un directorio vacío.\\
+s = link(name1,name2)			& Crea una nueva entrada, name2, que apunta a name1\\
+s = unlink(name)					& Elimina una entrada de directorio.\\
+s = mount(special, name, flag)	& Monta un sistema de archivos.\\
+s = umount(special)				& Desmonta un sistema de archivos.\\
+s = sync()						& Desaloja todos los bloques en caché al disco.\\
+s = chdir(dirname)				& Cambia el directorio de trabajo.\\
+s = chroot(dirname)				& Cambia el directorio raíz.\\
+\end{tabular}
+\end{flushleft}
+
+
+\item Llamadas al sistema para Protección
+
+\begin{flushleft}
+\begin{tabular}{ll}
+s = chmod(name, mode)	& Cambia los bits de protección de un archivo.\\
+uid = getuid()			& Obtiene el uid del invocador.\\
+gid = getgid()			& Obtiene el gid del invocador.\\
+s = setuid(uid)			& Establece el uid del invocador.\\
+s = setgid(gid)			& Establece el gid del invocador.\\
+s = chown(name, owner,group) & Cambia el propietario y el grupo de un archivo.\\
+oldmask = umask(complmode)	& Cambia la máscara de modo y devuelve la máscara anterior.\\
+\end{tabular}
+\end{flushleft}
+
+
+\item Llamadas al sistema para la Administración del Tiempo
+
+\begin{flushleft}
+\begin{tabular}{ll}
+seconds =time(\&seconds)	& Obtiene el tiempo transcurrido desde el 1ro de enero de 1970.\\
+s =stime(tp)	& Establece el tiempo transcurrido desde el 1ro de enero de 1970.\\
+s =utime(file,timep)	& Establece el tiempo de ``ultimo acceso'' de un archivo.\\
+s =times(buffer)	& Obtiene el tiempo de usuario y sistema gastados hasta este\\ 						& momento.\\
+\end{tabular}
+\end{flushleft}
+
+\end{itemize}
+
+\subsection{B - Instalar MINIX en su version para DOS (DOSMINIX), WINDOWS o LINUX (BOCHS) segun se describe en\\ http://www.dc.uba.ar/people/materias/so/html/minix.html}
+
+\vskip1cm
+
+Instalamos MINIX sin particionar el rigido en WINDOWS, con el emulador \textbf{Qemu Manager 4.0} que no requiere instalacion y de esta manera nos facilitaba el trabajo a la hora de cambiar de maquina.
+
+\begin{itemize}
+	\item DOWNLOADS
+	
+		\begin{itemize}
+			\item Qemu 4 + Qemu Manager, en la version que no requiere instalacion\\
+			http://www.davereyn.co.uk/qem/qemumanager40.zip
+			\item Disquette de instalacion de MINIX 144M.dsk\\
+			http://www-2.dc.uba.ar/materias/so/minix/simulado/win/winminix2.zip
+			\item Comandos extras\\
+			http://www-2.dc.uba.ar/materias/so/minix/img-386/Base/USR.TAZ
+			\item Fuentes del sistema\\
+			http://www-2.dc.uba.ar/materias/so/minix/img-386/Source/SYS.TAZ
+			\item Fuentes de comandos\\
+			http://www-2.dc.uba.ar/materias/so/minix/img-386/Source/CMD.TAZ
+			\item Programa para generar las imagenes de instalacion de MINIX.\\
+			http://www-2.dc.uba.ar/materias/so/minix/img-386/PARTIR.EXE
+		\end{itemize}
+\end{itemize}
+
+
+\falta
