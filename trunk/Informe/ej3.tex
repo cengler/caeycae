@@ -1,0 +1,53 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Comandos basicos de MINIX/UNIX}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\subsection{Póngale password root al root.}
+
+\vskip1cm
+
+\begin{verbatim}
+# passwd                                // comando para cambiar el password
+Changing the shadow password of root
+New password:                           // escribimos root
+Retype password:                        // reescribimos root
+#
+# exit                                  // salimos de la sesion
+
+Minix Release 2.0 Version 0
+
+noname login: root                      // intentamos logeamos como root
+Password:                               // escribimos algo != root
+Login incorrect                         // la contraseña no es correcta
+login: root                             // nos volvemos a logar como root
+Password:                               // escribimos root y entramos
+#
+\end{verbatim}
+
+\subsection{\textbf{pwd}}
+
+Indique qué directorio pasa a ser su $current\ directory$ si ejecuta:
+
+\subsubsection{$\sharp$ cd /usr/src}
+
+%\begin{verbatim}
+%    # cd /usr/src
+%    # pwd
+%    /usr/src
+%\end{verbatim}
+
+%Utilizando el comando \textbf{pwd} podemos ver en que directorio nos encontramos. En 'este caso el $current\ directory$ es \textbf{/usr/src}.
+
+\subsubsection{$\sharp$ cd}
+
+%\begin{verbatim}
+%    # cd
+%    # pwd
+%    /
+%    #
+%\end{verbatim}
+
+%Nuevamente utilizamos el comando \textbf{pwd} y el directorio actual es \textbf{/}.
+
+\subsubsection{¿C'omo explica el punto 1.3.2.2.?}
+
+\falta

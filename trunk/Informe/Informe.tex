@@ -1,0 +1,83 @@
+\documentclass[a4paper, 10pt, notitlepage]{article}
+
+\usepackage{moreverb} %para importar codigo
+
+\usepackage{pepotina} %paquete personal para la caratula del DC
+
+\usepackage[spanish,activeacute]{babel}
+\usepackage{babel} %paquete de idioma
+
+\usepackage[latin1]{inputenc}
+
+\usepackage{color}
+
+\usepackage{fancyhdr} %linea sup con comentarios
+
+%\usepackage{listings}
+
+\usepackage{lscape} %para hoja apaisada
+
+\usepackage{framed} %para crear cajas de texto
+
+\usepackage{lastpage} %ultima pagina
+
+\addtolength{\topmargin}{-50pt} 
+\addtolength{\textwidth}{105pt}
+\addtolength{\textheight}{120pt}
+\addtolength{\oddsidemargin}{-50pt}
+
+\newcommand{\imagen}[3]
+{
+	\begin{figure}[htbp]
+	  \centering
+	    \includegraphics[scale=0.5]{#1}
+	  \caption{#3}
+	\end{figure}
+}
+%%% Encabezado y pie de p'agina
+\pagestyle{fancy}
+\fancyhead[LO]{Algoritmos y Estructura de Datos III}
+\fancyhead[C]{}
+\fancyhead[RO]{P\'agina \thepage\ de \pageref{LastPage}}
+\renewcommand{\headrulewidth}{0.4pt}
+\fancyfoot{}
+
+
+
+\newcommand{\falta}{ \begin{framed}	\begin{center} \hspace{1cm} \Large FALTA \normalsize \hspace{1cm} \end{center} \end{framed}}
+
+\begin{document}
+
+\universidad{Universidad de Buenos Aires}
+\facultad{Facultad de ciencias exactas y naturales}
+\departamento{Departamento de Computacion}
+\materia{Sistemas Operativos}
+\resumen{En este trabajo se encontrará los resultados obtenidos sobre una serie de ejercicios que pondran en practica los conocimientos adquiridos en la materia, Sistemas Operativos.\\ Los temas a tratar son los siguientes: Instalacion, utilizacion de los principales comandos, compilacion de programas y modificacion de politicas del sistema operativo}
+\keys{MINIX, Sistemas Operativos, UNIX, KERNEL}
+\titulo{Trabajo Practico de MINIX}
+\subtitulo{Grupo Nº XXX}
+\fecha{13/10/2007 - 2do Cuatrimeste 2007}
+\footspace{1cm}
+%\integrante{Garc\'ia, Ana Daniela}{530/05}{danita719@yahoo.com.ar}
+\integrante{Engler, Christian Alejandro}{caeycae@gmail.com}
+
+%caratula
+%\maketitle{}
+
+%enunciado
+\input{ej1.tex}
+\newpage
+\input{ej2.tex}
+\newpage
+\input{ej3.tex}
+\newpage
+
+%ejercicios
+%\input{ejercicio1.tex}
+%\newpage
+%\input{ejercicio2.tex}
+%\newpage
+\tableofcontents
+	
+\end{document}
+
