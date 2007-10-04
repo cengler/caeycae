@@ -3,8 +3,9 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \subsection{Póngale password root al root.}
 
-\vskip1cm
+\vskip0.5cm
 
+\begin{framed}
 \begin{verbatim}
 # passwd                                // comando para cambiar el password
 Changing the shadow password of root
@@ -22,32 +23,232 @@ login: root                             // nos volvemos a logar como root
 Password:                               // escribimos root y entramos
 #
 \end{verbatim}
+\end{framed}
 
-\subsection{\textbf{pwd}}
+\subsection{pwd}
+Indique qué directorio pasa a ser su current directory si ejecuta: 
 
-Indique qué directorio pasa a ser su $current\ directory$ si ejecuta:
+\subsubsection{\# cd /usr/src}
+\begin{framed}
+\begin{verbatim}
+# cd usr/src                            // cambia el current directory
+# pwd                                   // nos muestra el current directory
+/usr/src
+#
+\end{verbatim}
+\end{framed}
 
-\subsubsection{$\sharp$ cd /usr/src}
+\subsubsection{\# cd}
+\begin{framed}
+\begin{verbatim}
+# cd                                    // cambia el current directory "al home"
+# pwd                                   // nos muestra el current directory 
+/
+#
+\end{verbatim}
+\end{framed}
 
-%\begin{verbatim}
-%    # cd /usr/src
-%    # pwd
-%    /usr/src
-%\end{verbatim}
+\subsubsection{¿Cómo explica el punto 3.1.2?}
+El comando cd sin parametros cambia el current directoy al \"home\" del usuario, como el usuario es root (administrador)
+\falta 
 
-%Utilizando el comando \textbf{pwd} podemos ver en que directorio nos encontramos. En 'este caso el $current\ directory$ es \textbf{/usr/src}.
+\subsection{cat}
+Cual es el contenido del archivo /usr/src/.profile y para que sirve.
+\begin{framed}
+\begin{verbatim}
+# cat /usr/src/.profile                 // cat nos muestra el archivo
+# Login shell profile.
 
-\subsubsection{$\sharp$ cd}
+# Environment.
+umask 022
+PATH=/usr/local/bin:/bin:/usr/bin 
+PS1="! "
+export PATH
 
-%\begin{verbatim}
-%    # cd
-%    # pwd
-%    /
-%    #
-%\end{verbatim}
+# Erase character, erase line, and interrupt keys.
+stty erase '^H' kill '^U' intr '^?'
 
-%Nuevamente utilizamos el comando \textbf{pwd} y el directorio actual es \textbf{/}.
+# Check termianl type.
+case $TERM in
+dialup|unknown|network) 
+        echo -n "Terminal type? ($TERM) "; read term"
+        TERM="${term:-$TERM}"
+esac
 
-\subsubsection{¿C'omo explica el punto 1.3.2.2.?}
+# Shell configuration.
+case "$0" in *ash) . $HOME/.ashrc;; esac
+#
+\end{verbatim} 
+\end{framed}
+
+Cada usuario tiene asignado un shell o interprete de comandos. Nada impide que, en lugar de un
+interprete de comandos, se asigne a un usuario un programa, cada vez que accediera al sistema, solo
+podría ejecutar ese programa o aplicación, y abandonaría el sistema cada vez que finalizara dicho 
+programa.
+Una vez comprobada la validez del acceso y activado el shell, éste lee el archivo /etc/profile, si existe, y
+ejecuta todas las intrucciones que contenga. Entre las acciones principales que pueden indicarse en este 
+archivo se pueden destacar:
+\begin{itemize}
+\item Visualización de los archivos de copyright y motd (mensajes que el administrador ponga para
+información de los usuarios).
+\item Establecimiento del TIMEZONE o huso horario. 
+\item Indicación de la existencia de correo.
+\item Indicación de la hora actual, y de la hora del último acceso.
+\item Establecimiento de algunas variables de entorno (PATH, LOGNAME, etc.).
+\end{itemize}
+Una vez ejecutado el profile general, lee \$HOME/.profile con el cual se completará la definición 
+del entorno del usuario Entre las acciones que se pueden encontrar en este archivo destacan:
+\begin{itemize}
+\item Establecimiento de las variables de entorno definitivas.
+\item Acciones personalizadas del arranque. 
+\end{itemize}
 
 \falta
+
+revisar
+
+\falta
+
+\subsection{find}
+En que directorio se encuentra el archivo \verb|proc.c|
+
+\begin{framed}
+\begin{verbatim} 
+# find / -name proc.c -print            // buscamos el archivo
+/usr/src/kernel/proc.c                  // tiene una unica aparicion en
+#                                       // /usr/src/kernel/                               
+\end{verbatim} 
+\end{framed}
+
+\subsection{mkdir}
+Genere un directorio \verb|/usr/<nombregrupo>|
+\begin{framed}
+\begin{verbatim} 
+# find / -name proc.c -print            // buscamos el archivo
+# cd /usr                               // nos posicionamos en /usr
+# pwd                                   // verificamos posicion
+/usr
+# mkdir grupo16                         // creamos la carpeta grupo16
+# ls                                    // listamos archivos y directorios
+adm  bin  grupo16  lib     man   preserve  src
+ast  etc  include  local   mdec  spool     tmp      
+# cd grupo16                            // ingresamos al directorio creado
+#                       
+\end{verbatim} 
+\end{framed}
+
+\subsection{cp}
+Copie el archivo \verb|/etc/passwd| al directorio \verb|/usr/<nombregrupo>|
+\begin{framed}
+\begin{verbatim} 
+# cp /etc/passwd /usr/grupo16           // copiamos el archivo
+# cd /usr/grupo16                       // me posiciono en la cerpeta destino
+# ls                                    // listo archivos y directorios
+passwd                                  // 'passwd' se encuentra en el directorio
+#
+\end{verbatim} 
+\end{framed}
+
+\subsection{chgrp}
+Cambie el grupo del archivo \verb|/usr/<grupo>/passwd| para que sea \verb|other|
+\begin{framed}
+\begin{verbatim} 
+# cd /usr/grupo16                       // ingresamos al directorio
+# ls -l                                 // listamos con -l que nos 
+                                        // mas informacion del archivo
+total 1                                 // existe solo un archivo
+-rw-r--r--  1   root    operator    285  Oct  3  21:55  passwd
+                                        // el grupo es: operator
+# chgrp other passwd                    // cambiamos el grupo
+# ls -l                                 // volvemos a listar
+total 1                                 //
+-rw-r--r--  1   root    other       285  Oct  3  21:55  passwd
+                                        // y ahora el grupo es other
+#
+\end{verbatim} 
+\end{framed}
+
+\subsection{chown}
+Cambie el propietario del archivo \verb|/usr/<grupo>/passwd| para que sea ast 
+\begin{framed}
+\begin{verbatim} 
+# cd /usr/grupo16                       // ingresamos al directorio
+# ls -l                                 // listamos
+total 1                                 //
+-rw-r--r--  1   root    other       285  Oct  3  21:55  passwd
+                                        // el propietario es: root
+# chown ast passwd                      // cambiamos el propietario
+# ls -l                                 // volvemos a listar
+total 1                                 //
+-rw-r--r--  1   ast     other       285  Oct  3  21:55  passwd
+                                        // y ahora el propietario es ast
+#
+\end{verbatim} 
+\end{framed}
+
+
+
+%\subsection{chmod
+%Cambie los permisos del archivo /usr/<grupo>/passwd para que
+%Ø el propietario tenga permisos de lectura, escritura y ejecución
+%Ø el grupo tenga solo permisos de lectura y ejecución
+%Ø el resto tenga solo permisos de ejecución
+%\subsection{grep
+%Muestre las lineas que tiene el texto include en el archivo
+%/usr/src/kernel/main.c
+%Muestre las lineas que tiene el texto POSIX que se encuentren en todos los archivos 
+%/usr/src/kernel/
+%\subsection{su
+%3.10.1. Para qué sirve?
+%3.10.2. Que sucede si ejecuta el comando su estando logueado como root?
+%3.10.3. Genere una cuenta de <usuario>
+%3.10.4. Entre a la cuenta <usuario> generada 
+%3.10.5. Repita los comandos de 3.10.2
+%\subsection{passwd
+%3.11.1. Cambie la password del usuario nobody
+%3.11.2. presione las teclas ALT-F2 y verá otra sesion MINIX. Logearse como nobody
+%3.11.3. ejecutar el comando su. 
+%3.11.3.1. ¿Que le solicita ?
+%3.11.3.2. ¿Sucede lo mismo que en 3.10.2? ¿Por qué?
+%\subsection{rm
+%Suprima el archivo /usr/<grupo>/passwd
+%\subsection{ln 
+%Enlazar el archivo /etc/passwd a los siguientes archivos /tmp/contra1 /tmp/contra2
+%Hacer un ls – l para ver cuantos enlaces tiene /etc/passwd
+%\subsection{mkfs
+%Genere un Filesystem MINIX en un diskette
+%\subsection{mount 
+%Montelo en el directorio
+%/mnt
+%Presente los filesystems que tiene montados
+%\subsection{df
+%Que espacio libre y ocupado tienen todos los filesystems montados? (En KBYTES)
+%4
+%\subsection{ps
+%3.17.1. Cuantos procesos de usuario tiene ejecutando ? 
+%3.17.2. Indique cuantos son del sistema
+%\subsection{umount
+%3.18.1. Desmonte el Filesystem del directorio
+%/mnt
+%3.18.2. Monte el Filesystem del diskette como read-only en el directorio
+%/mnt
+%3.18.3. Desmonte el Filesystem del directorio /mnt 
+%\subsection{fsck
+%Chequee la consistencia de Filesystem del diskette
+%\subsection{dosdir
+%Tome un diskette formateado en DOS con archivos y ejecute
+%dosdir a
+%Ejecute los comandos necesarios para que funcione correctamente el comando 
+%anterior
+%\subsection{dosread
+%Copie un archivo de texto desde un diskette DOS
+%al directorio /tmp
+%\subsection{doswrite
+%Copie el archivo /etc/passwd al diskette DOS
+
+
+%\begin{framed}
+%\begin{verbatim} 
+%
+%\end{verbatim} 
+%\end{framed}
